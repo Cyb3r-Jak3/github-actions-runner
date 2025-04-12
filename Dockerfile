@@ -15,6 +15,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     ssh \
     tzdata
 
+# renovate: datasource=github-tags depName=aws/aws-cli
 ARG AWS_CLI_VERSION=2.26.0
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
@@ -23,8 +24,6 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION
     rm -rf aws
 
 ## Install OpenTofu
-
-
 RUN curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh &&\
     chmod +x install-opentofu.sh && \
     ./install-opentofu.sh --install-method standalone && \

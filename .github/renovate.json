@@ -3,7 +3,6 @@
     "extends": [
       "config:recommended",
       "helpers:pinGitHubActionDigestsToSemver",
-      "schedule:earlyMondays",
       "github>Cyb3r-Jak3/renovate-configs//assign-me.json"
     ],
     "prHourlyLimit": 10

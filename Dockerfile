@@ -44,6 +44,6 @@ RUN git clone --depth=1 https://github.com/tofuutils/tofuenv.git ~/.tofuenv && \
 
 COPY ./pre-hook.sh /etc/arc/hooks/pre-hook.sh
 
-ENV ACTIONS_RUNNER_HOOK_JOB_STARTED=/etc/arc/hooks/job-started.sh 
+ENV ACTIONS_RUNNER_HOOK_JOB_STARTED=/etc/arc/hooks/pre-hook.sh
 
 USER runner:runner

@@ -1,4 +1,7 @@
 #!/bin/bash
 
-echo "PATH=$PATH:$HOME/.local/bin:$HOME/.tofuenv/bin" >> "$GITHUB_ENV"
-echo export TOFUENV_ROOT="$HOME/.tofuenv" >> "$GITHUB_ENV"
+{
+    echo PATH=$PATH:$HOME/.local/bin:$HOME/.tofuenv/bin
+    echo TOFUENV_ROOT="$HOME/.tofuenv"
+    echo NVM_DIR="$HOME/.nvm "
+} >> "$GITHUB_ENV"

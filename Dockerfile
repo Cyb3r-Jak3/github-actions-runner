@@ -13,7 +13,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     zip \
     python3-pip \
     ssh \
-    tzdata
+    tzdata \
+    wget
 
 # renovate: datasource=github-tags depName=aws/aws-cli
 ARG AWS_CLI_VERSION=2.26.0
@@ -29,5 +30,20 @@ RUN curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opent
     ./install-opentofu.sh --install-method standalone && \
     rm -f install-opentofu.sh
 
+
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash && \
+    echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.bashrc && \
+    echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.bashrc && \
+    echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> ~/.bashrc
+
+
+RUN git clone --depth=1 https://github.com/tofuutils/tofuenv.git ~/.tofuenv && \
+    echo 'export PATH="$HOME/.tofuenv/bin:$PATH"' >> ~/.bashrc && \
+    echo 'eval "$(tofuenv init -)"' >> ~/.bashrc && \
+    echo 'export TOFUENV_ROOT="$HOME/.tofuenv"' >> ~/.bashrc 
+
+COPY ./pre-hook.sh /etc/arc/hooks/pre-hook.sh
+
+ENV ACTIONS_RUNNER_HOOK_JOB_STARTED=/etc/arc/hooks/job-started.sh 
 
 USER runner:runner

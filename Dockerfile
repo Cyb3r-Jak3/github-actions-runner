@@ -25,10 +25,10 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION
     rm -rf aws
 
 ## Install OpenTofu
-RUN curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh &&\
-    chmod +x install-opentofu.sh && \
-    ./install-opentofu.sh --install-method standalone && \
-    rm -f install-opentofu.sh
+# RUN curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh &&\
+#     chmod +x install-opentofu.sh && \
+#     ./install-opentofu.sh --install-method standalone && \
+#     rm -f install-opentofu.sh
 
 
 RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash && \
@@ -37,10 +37,7 @@ RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | 
     echo '[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"' >> ~/.bashrc
 
 
-RUN git clone --depth=1 https://github.com/tofuutils/tofuenv.git ~/.tofuenv && \
-    echo 'export PATH="$HOME/.tofuenv/bin:$PATH"' >> ~/.bashrc && \
-    echo 'eval "$(tofuenv init -)"' >> ~/.bashrc && \
-    echo 'export TOFUENV_ROOT="$HOME/.tofuenv"' >> ~/.bashrc 
+RUN git clone --depth=1 https://github.com/tofuutils/tofuenv.git ~/.tofuenv
 
 COPY ./pre-hook.sh /etc/arc/hooks/pre-hook.sh
 

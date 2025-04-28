@@ -4,6 +4,6 @@
       "config:recommended",
       "helpers:pinGitHubActionDigestsToSemver",
       "github>Cyb3r-Jak3/renovate-configs//assign-me.json",
-      "helpers:pinDigests"
+      "docker:pinDigests"
     ]
   }

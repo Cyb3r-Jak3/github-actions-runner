@@ -37,12 +37,11 @@ RUN chgrp -R runner /home/runner && \
     chown -R runner:runner /runner && \
     chmod a+w /usr/bin
 
-RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-
-RUN git clone --depth=1 https://github.com/tofuutils/tofuenv.git ~/.tofuenv
-
 COPY ./pre-hook.sh /etc/arc/hooks/pre-hook.sh
 
 ENV ACTIONS_RUNNER_HOOK_JOB_STARTED=/etc/arc/hooks/pre-hook.sh
 
 USER runner:runner
+
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+RUN git clone --depth=1 https://github.com/tofuutils/tofuenv.git ~/.tofuenv

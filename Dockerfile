@@ -17,6 +17,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     tzdata \
     wget
 
+
+WORKDIR /tmp
 # renovate: datasource=github-tags depName=aws/aws-cli
 ARG AWS_CLI_VERSION=2.27.7
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && \
@@ -25,11 +27,15 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION
     rm awscliv2.zip && \
     rm -rf aws
 
-## Install OpenTofu
-# RUN curl --proto '=https' --tlsv1.2 -fsSL https://get.opentofu.org/install-opentofu.sh -o install-opentofu.sh &&\
-#     chmod +x install-opentofu.sh && \
-#     ./install-opentofu.sh --install-method standalone && \
-#     rm -f install-opentofu.sh
+# renovate: datasource=github-tags depName=aws/aws-cli
+ARG NVM_VERSION=0.40.3
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash && \
+    . ~/.nvm/nvm.sh && \
+    nvm install --lts && \
+    nvm use --lts && \
+    nvm alias default node && \
+    nvm cache clear && \
+    node -v
 
 RUN chgrp -R runner /home/runner && \
     chown -R runner:runner /home/runner && \
@@ -41,7 +47,8 @@ COPY ./pre-hook.sh /etc/arc/hooks/pre-hook.sh
 
 ENV ACTIONS_RUNNER_HOOK_JOB_STARTED=/etc/arc/hooks/pre-hook.sh
 
+WORKDIR /
+
 USER runner:runner
 
-RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 RUN git clone --depth=1 https://github.com/tofuutils/tofuenv.git ~/.tofuenv

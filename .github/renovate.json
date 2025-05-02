@@ -13,6 +13,12 @@
       "matchStrings": ["ARG AWS_CLI_VERSION=(?<currentValue>.*?)\\n"],
       "depNameTemplate": "aws/aws-cli",
       "datasourceTemplate": "github-tags"
+    }, {
+      "customType": "regex",
+      "fileMatch": ["^Dockerfile$"],
+      "matchStrings": ["ARG NVM_VERSION=(?<currentValue>.*?)\\n"],
+      "depNameTemplate": "nvm-sh/nvm",
+      "datasourceTemplate": "github-tags"
     }
   ]
   }

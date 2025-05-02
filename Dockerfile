@@ -11,13 +11,14 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     jq \
     unzip \
     zip \
+    python3 \
     python3-pip \
     ssh \
     tzdata \
     wget
 
 # renovate: datasource=github-tags depName=aws/aws-cli
-ARG AWS_CLI_VERSION=2.26.0
+ARG AWS_CLI_VERSION=2.27.7
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     ./aws/install && \

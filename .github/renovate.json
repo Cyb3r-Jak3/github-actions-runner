@@ -5,5 +5,14 @@
       "helpers:pinGitHubActionDigestsToSemver",
       "github>Cyb3r-Jak3/renovate-configs//assign-me.json",
       "docker:pinDigests"
-    ]
+    ],
+    "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^Dockerfile$"],
+      "matchStrings": ["ARG AWS_CLI_VERSION=(?<currentValue>.*?)\\n"],
+      "depNameTemplate": "aws/aws-cli",
+      "datasourceTemplate": "github-tags"
+    }
+  ]
   }

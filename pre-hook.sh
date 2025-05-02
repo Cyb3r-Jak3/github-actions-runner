@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source $HOME/.nvm/nvm.sh
+
 {
     echo PATH=$PATH:$HOME/.local/bin:$HOME/.tofuenv/bin
     echo TOFUENV_ROOT="$HOME/.tofuenv"

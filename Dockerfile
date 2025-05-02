@@ -27,16 +27,6 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION
     rm awscliv2.zip && \
     rm -rf aws
 
-# renovate: datasource=github-tags depName=aws/aws-cli
-ARG NVM_VERSION=0.40.3
-RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash && \
-    . ~/.nvm/nvm.sh && \
-    nvm install --lts && \
-    nvm use --lts && \
-    nvm alias default node && \
-    nvm cache clear && \
-    node -v
-
 RUN chgrp -R runner /home/runner && \
     chown -R runner:runner /home/runner && \
     mkdir -p /runner && \
@@ -50,5 +40,15 @@ ENV ACTIONS_RUNNER_HOOK_JOB_STARTED=/etc/arc/hooks/pre-hook.sh
 WORKDIR /
 
 USER runner:runner
+
+# renovate: datasource=github-tags depName=nvm-sh/nvm
+ARG NVM_VERSION=0.40.3
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v${NVM_VERSION}/install.sh | bash && \
+    . ~/.nvm/nvm.sh && \
+    nvm install 20 && \
+    nvm use 20 && \
+    nvm alias default node && \
+    nvm cache clear && \
+    node -v
 
 RUN git clone --depth=1 https://github.com/tofuutils/tofuenv.git ~/.tofuenv

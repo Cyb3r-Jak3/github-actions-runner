@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -xe
 source $HOME/.nvm/nvm.sh
 
 {

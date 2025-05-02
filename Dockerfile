@@ -31,6 +31,11 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION
 #     ./install-opentofu.sh --install-method standalone && \
 #     rm -f install-opentofu.sh
 
+RUN chgrp -R runner /home/runner && \
+    chown -R runner:runner /home/runner && \
+    mkdir -p /runner && \
+    chown -R runner:runner /runner && \
+    chmod a+w /usr/bin
 
 RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
 

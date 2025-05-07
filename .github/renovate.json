@@ -1,24 +1,33 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": [
-      "config:recommended",
-      "helpers:pinGitHubActionDigestsToSemver",
-      "github>Cyb3r-Jak3/renovate-configs//assign-me.json",
-      "docker:pinDigests"
-    ],
-    "customManagers": [
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigestsToSemver",
+    "github>Cyb3r-Jak3/renovate-configs//assign-me.json",
+    "docker:pinDigests"
+  ],
+  "customManagers": [
     {
       "customType": "regex",
-      "fileMatch": ["^Dockerfile$"],
-      "matchStrings": ["ARG AWS_CLI_VERSION=(?<currentValue>.*?)\\n"],
+      "managerFilePatterns": [
+        "/^Dockerfile$/"
+      ],
+      "matchStrings": [
+        "ARG AWS_CLI_VERSION=(?<currentValue>.*?)\\n"
+      ],
       "depNameTemplate": "aws/aws-cli",
       "datasourceTemplate": "github-tags"
-    }, {
+    },
+    {
       "customType": "regex",
-      "fileMatch": ["^Dockerfile$"],
-      "matchStrings": ["ARG NVM_VERSION=(?<currentValue>.*?)\\n"],
+      "managerFilePatterns": [
+        "/^Dockerfile$/"
+      ],
+      "matchStrings": [
+        "ARG NVM_VERSION=(?<currentValue>.*?)\\n"
+      ],
       "depNameTemplate": "nvm-sh/nvm",
       "datasourceTemplate": "github-tags"
     }
   ]
-  }
+}

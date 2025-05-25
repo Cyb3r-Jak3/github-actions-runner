@@ -27,6 +27,11 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWS_CLI_VERSION
     rm awscliv2.zip && \
     rm -rf aws
 
+RUN curl -sL https://deb.nodesource.com/setup_20.x -o /tmp/nodesource_setup.sh && \
+    bash /tmp/nodesource_setup.sh && \
+    apt-get install -y nodejs && \
+    rm /tmp/nodesource_setup.sh
+
 RUN chgrp -R runner /home/runner && \
     chown -R runner:runner /home/runner && \
     mkdir -p /runner && \

@@ -2,6 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "github>Cyb3r-Jak3/renovate-configs//recommend-extended.json",
-    "customManagers:dockerfileVersions"
+    "customManagers:dockerfileVersions",
+    "schedule:automergeDaily",
+    "schedule:daily"
   ]
 }

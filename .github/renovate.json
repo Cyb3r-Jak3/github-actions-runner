@@ -5,5 +5,11 @@
     "customManagers:dockerfileVersions",
     "schedule:automergeDaily",
     "schedule:daily"
+  ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
   ]
 }

@@ -38,6 +38,14 @@ RUN chgrp -R runner /home/runner && \
     chown -R runner:runner /runner && \
     chmod a+w /usr/bin
 
+# renovate: datasource=github-tags depName=terraform-docs/terraform-docs
+ARG TERRAFORM_DOCS_VERSION=0.20.0
+RUN curl -sSLo ./terraform-docs.tar.gz https://terraform-docs.io/dl/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-$(uname)-amd64.tar.gz && \
+    tar -xzf terraform-docs.tar.gz && \
+    chmod +x terraform-docs && \
+    mv terraform-docs /usr/local/bin/terraform-docs && \
+    rm terraform-docs.tar.gz
+
 COPY ./pre-hook.sh /etc/arc/hooks/pre-hook.sh
 
 ENV ACTIONS_RUNNER_HOOK_JOB_STARTED=/etc/arc/hooks/pre-hook.sh

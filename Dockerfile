@@ -101,8 +101,12 @@ RUN chgrp -R runner /home/runner && \
 
 USER runner:runner
 
-# Sanity to ensure programs are installed correctly
-RUN tofuenv list-remote && \
+# Source GITHUB_TOKEN from /run/secrets/github_token if the file exists
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    if [ -f /run/secrets/github_token ]; then \
+      export GITHUB_TOKEN=$(cat /run/secrets/github_token); \
+    fi && \
+    tofuenv list-remote && \
     terraform-docs --version && \
     yq --version && \
     aws --version && \

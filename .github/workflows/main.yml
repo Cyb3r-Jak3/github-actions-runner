@@ -74,6 +74,8 @@ jobs:
           cache-to: type=gha,mode=max
           sbom: true
           provenance: mode=max
+          secrets: |
+            id=GITHUB_TOKEN
 
       - name: GitHub Container Attestation
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2.4.0

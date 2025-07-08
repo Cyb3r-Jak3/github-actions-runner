@@ -74,8 +74,21 @@ jobs:
           cache-to: type=gha,mode=max
           sbom: true
           provenance: mode=max
-          secrets: |
-            id=GITHUB_TOKEN
+
+      - name: Test Run
+        run: |
+          docker buildx -t test-runner-image . && \
+          docker run --rm \
+            --env GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+            test-runner-image \
+            tofuenv list-remote && \
+            terraform-docs --version && \
+            yq --version && \
+            aws --version && \
+            docker buildx version && \
+            docker compose version && \
+            node -v && \
+            helm version
 
       - name: GitHub Container Attestation
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2.4.0

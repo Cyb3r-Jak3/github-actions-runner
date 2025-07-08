@@ -100,17 +100,3 @@ RUN chgrp -R runner /home/runner && \
   chmod a+w -R /usr/bin
 
 USER runner:runner
-
-# Source GITHUB_TOKEN from /run/secrets/github_token if the file exists
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
-    if [ -f /run/secrets/github_token ]; then \
-      export GITHUB_TOKEN=$(cat /run/secrets/github_token); \
-    fi && \
-    tofuenv list-remote && \
-    terraform-docs --version && \
-    yq --version && \
-    aws --version && \
-    docker buildx version && \
-    docker compose version && \
-    node -v  && \
-    helm version

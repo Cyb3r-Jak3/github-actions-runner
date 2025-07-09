@@ -101,7 +101,8 @@ jobs:
               docker buildx version && \
               docker compose version && \
               node -v && \
-              helm version
+              helm version && \
+              op --version
             '
 
       - name: GitHub Container Attestation

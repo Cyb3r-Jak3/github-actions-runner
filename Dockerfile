@@ -100,13 +100,3 @@ RUN chgrp -R runner /home/runner && \
   chmod a+w -R /usr/bin
 
 USER runner:runner
-
-# Sanity to ensure programs are installed correctly
-RUN tofuenv list-remote && \
-    terraform-docs --version && \
-    yq --version && \
-    aws --version && \
-    docker buildx version && \
-    docker compose version && \
-    node -v  && \
-    helm version

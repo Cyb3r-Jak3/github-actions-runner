@@ -93,7 +93,7 @@ jobs:
           docker run --rm \
             --entrypoint /bin/bash \
             --env GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
-            $(echo ${{ steps.meta.outputs.tags }} | cut -d',' -f1) -c '
+            ${{ steps.build.outputs.imageid }} -c '
               tofuenv list-remote && \
               terraform-docs --version && \
               yq --version && \

@@ -85,15 +85,15 @@ jobs:
           cache-to: type=gha,mode=max
           sbom: true
           provenance: mode=max
+          load: ${{ !startsWith(github.ref, 'refs/tags/v') }}
 
       - name: Test Run
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
         run: |
-          docker buildx build --cache-from type=gha --load -t test-runner-image . && \
           docker run --rm \
             --entrypoint /bin/bash \
             --env GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
-            test-runner-image -c '
+            $(echo ${{ steps.meta.outputs.tags }} | cut -d',' -f1) -c '
               tofuenv list-remote && \
               terraform-docs --version && \
               yq --version && \

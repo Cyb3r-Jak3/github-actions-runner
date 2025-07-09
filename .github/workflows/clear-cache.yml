@@ -1,0 +1,12 @@
+on:
+  pull_request:
+    types: [ closed ]
+
+jobs:
+  clear-caches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clear caches
+        uses: theAngularGuy/clear-cache-of-pull-request@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

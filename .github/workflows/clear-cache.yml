@@ -11,6 +11,6 @@ jobs:
       actions: write
     steps:
       - name: Clear caches
-        uses: theAngularGuy/clear-cache-of-pull-request@main
+        uses: theAngularGuy/clear-cache-of-pull-request@b72bb60cd2fa48c01695afdf0ca755b34b115429
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

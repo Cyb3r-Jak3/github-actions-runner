@@ -39,7 +39,6 @@ jobs:
         with:
           daemon-config: |
             {
-              "debug": true,
               "features": {
                 "containerd-snapshotter": true
               }
@@ -101,7 +100,8 @@ jobs:
               docker buildx version && \
               docker compose version && \
               node -v && \
-              helm version
+              helm version && \
+              op --version
             '
 
       - name: GitHub Container Attestation

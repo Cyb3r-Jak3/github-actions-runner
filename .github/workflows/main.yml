@@ -77,7 +77,7 @@ jobs:
 
       - name: Test Run
         run: |
-          docker buildx -t test-runner-image . && \
+          docker buildx build --cache-from type=gha -t test-runner-image . && \
           docker run --rm \
             --env GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
             test-runner-image \

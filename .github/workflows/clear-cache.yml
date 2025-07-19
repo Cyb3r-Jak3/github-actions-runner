@@ -1,3 +1,4 @@
+name: Clear Cache on PR Close
 on:
   pull_request:
     types: [ closed ]

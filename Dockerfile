@@ -86,7 +86,6 @@ RUN curl -L "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${TARGETARCH}.tar.g
   cp "/tmp/helm/linux-${TARGETARCH}/helm" /usr/local/bin/helm && \
   chmod +x /usr/local/bin/helm
 
-# Install 1Password CLI
 ENV OP_CLI_VERSION=v2.31.1
 RUN wget "https://cache.agilebits.com/dist/1P/op2/pkg/${OP_CLI_VERSION}/op_linux_${TARGETARCH}_${OP_CLI_VERSION}.zip" -O op.zip && \
   unzip -qq op.zip && \
@@ -97,6 +96,14 @@ RUN wget "https://cache.agilebits.com/dist/1P/op2/pkg/${OP_CLI_VERSION}/op_linux
   groupadd -f onepassword-cli && \
   chgrp onepassword-cli /usr/local/bin/op && \
   chmod g+s /usr/local/bin/op
+
+# renovate: datasource=github-releases depName=anchore/syft
+ENV SYFT_VERSION=1.28.0
+RUN wget "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syft_${SYFT_VERSION}_linux_${TARGETARCH}.tar.gz" -O syft.tar.gz && \
+  tar -xzf syft.tar.gz syft && \
+  mv syft /usr/local/bin/syft && \
+  rm syft.tar.gz && \
+  chmod +x /usr/local/bin/syft
 
 WORKDIR /
 

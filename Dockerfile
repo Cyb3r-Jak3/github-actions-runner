@@ -25,7 +25,7 @@ WORKDIR /tmp
 ARG AWS_CLI_VERSION=2.27.55
 RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
     curl "https://awscli.amazonaws.com/awscli-exe-linux-${ARCH}-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && \
-    unzip awscliv2.zip && \
+    unzip -qq awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
     rm -rf aws
@@ -87,20 +87,16 @@ RUN curl -L "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${TARGETARCH}.tar.g
   chmod +x /usr/local/bin/helm
 
 # Install 1Password CLI
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-  curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
-  gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
-  echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | \
-  tee /etc/apt/sources.list.d/1password.list && \
-  mkdir -p /etc/debsig/policies/AC2D62742012EA22/ && \
-  curl -sS https://downloads.1password.com/linux/debian/debsig/1password.pol | \
-  tee /etc/debsig/policies/AC2D62742012EA22/1password.pol && \
-  mkdir -p /usr/share/debsig/keyrings/AC2D62742012EA22 && \
-  curl -sS https://downloads.1password.com/linux/keys/1password.asc | \
-  gpg --dearmor --output /usr/share/debsig/keyrings/AC2D62742012EA22/debsig.gpg && \
-  apt update && \ 
-  apt install 1password-cli
+ENV OP_CLI_VERSION=v2.31.1
+RUN wget "https://cache.agilebits.com/dist/1P/op2/pkg/${OP_CLI_VERSION}/op_linux_${TARGETARCH}_${OP_CLI_VERSION}.zip" -O op.zip && \
+  unzip -qq op.zip && \
+  gpg --keyserver keyserver.ubuntu.com --receive-keys 3FEF9748469ADBE15DA7CA80AC2D62742012EA22 && \
+  gpg --verify op.sig op && \
+  mv op /usr/local/bin/ && \
+  rm -r op.zip && \
+  groupadd -f onepassword-cli && \
+  chgrp onepassword-cli /usr/local/bin/op && \
+  chmod g+s /usr/local/bin/op
 
 WORKDIR /
 

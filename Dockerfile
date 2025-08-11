@@ -1,4 +1,4 @@
-FROM ghcr.io/actions/actions-runner:2.326.0@sha256:9c3383600872325f21951a0a1a8ae640361ff5e1abdf1f2900de8ba1cfd915e9
+FROM ghcr.io/actions/actions-runner:2.327.1@sha256:551dc313e6b6ef1ca7b9594d8090a7a6cc7aeb663f1079ba2fec07e9158f3259
 
 ARG TARGETARCH
 

@@ -98,7 +98,7 @@ RUN wget "https://cache.agilebits.com/dist/1P/op2/pkg/${OP_CLI_VERSION}/op_linux
   chmod g+s /usr/local/bin/op
 
 # renovate: datasource=github-releases depName=anchore/syft
-ENV SYFT_VERSION=1.28.0
+ENV SYFT_VERSION=1.30.0
 RUN wget "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syft_${SYFT_VERSION}_linux_${TARGETARCH}.tar.gz" -O syft.tar.gz && \
   tar -xzf syft.tar.gz syft && \
   mv syft /usr/local/bin/syft && \

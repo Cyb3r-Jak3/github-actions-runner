@@ -51,7 +51,7 @@ ENV DOCKER_PLUGINS_DIR="/usr/local/lib/docker/cli-plugins"
 
 # Install docker buildx
 # renovate: datasource=github-tags depName=docker/buildx
-ENV DOCKER_BUILDX_VERSION="0.25.0"
+ENV DOCKER_BUILDX_VERSION="0.26.1"
 RUN mkdir -p "$DOCKER_PLUGINS_DIR" && \
   curl -L "https://github.com/docker/buildx/releases/download/v${DOCKER_BUILDX_VERSION}/buildx-v${DOCKER_BUILDX_VERSION}.linux-${TARGETARCH}" -o "$DOCKER_PLUGINS_DIR/docker-buildx" && \
   chmod +x "$DOCKER_PLUGINS_DIR/docker-buildx"

@@ -10,14 +10,16 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get install -y --no-install-recommends --no-install-suggests \
     git \
     curl \
+    dirmngr\ 
     jq \
+    gpg \
     unzip \
     zip \
     python3 \
     python3-pip \
     ssh \
     tzdata \
-    wget
+    wget 
 
 
 WORKDIR /tmp

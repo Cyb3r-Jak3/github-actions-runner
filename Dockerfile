@@ -75,7 +75,7 @@ RUN curl -sL "https://github.com/tofuutils/tofuenv/archive/v${TOFUENV_VERSION}.t
     chmod -R +rw /tmp/tofuenv-${TOFUENV_VERSION}
 
 # Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_20.x -o /tmp/nodesource_setup.sh && \
+RUN curl -sL https://deb.nodesource.com/setup_lts.x -o /tmp/nodesource_setup.sh && \
     bash /tmp/nodesource_setup.sh && \
     apt-get install -y nodejs && \
     rm /tmp/nodesource_setup.sh

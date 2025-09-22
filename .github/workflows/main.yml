@@ -101,7 +101,8 @@ jobs:
               docker compose version && \
               node -v && \
               helm version && \
-              op --version
+              op --version && \
+              cloudflare-utils --version
             '
 
       - name: GitHub Container Attestation

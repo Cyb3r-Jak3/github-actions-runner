@@ -18,8 +18,10 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     python3 \
     python3-pip \
     ssh \
+    tar \
     tzdata \
-    wget 
+    xz-utils \
+    wget
 
 
 WORKDIR /tmp
@@ -106,6 +108,14 @@ RUN wget "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syf
   mv syft /usr/local/bin/syft && \
   rm syft.tar.gz && \
   chmod +x /usr/local/bin/syft
+
+# renovate: datasource=github-releases depName=cyb3r-jak3/cloudflare-utils
+ENV CLOUDFLARE_UTILS_VERSION=1.4.5
+RUN curl -L "https://github.com/Cyb3r-Jak3/cloudflare-utils/releases/download/v${CLOUDFLARE_UTILS_VERSION}/cloudflare-utils_${CLOUDFLARE_UTILS_VERSION}_linux_${TARGETARCH}.tar.xz" -o /tmp/cloudflare-utils.tar.xz && \
+  mkdir -p /tmp/cloudflare-utils && \
+  tar -xvf /tmp/cloudflare-utils.tar.xz -C /tmp/cloudflare-utils && \
+  cp "/tmp/cloudflare-utils/cloudflare-utils" /usr/local/bin/cloudflare-utils && \
+  chmod +x /usr/local/bin/cloudflare-utils
 
 WORKDIR /
 

@@ -92,7 +92,7 @@ RUN curl -sL "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${TARGETARCH}.tar.
   cp "/tmp/helm/linux-${TARGETARCH}/helm" /usr/local/bin/helm && \
   chmod +x /usr/local/bin/helm
 
-ENV OP_CLI_VERSION=v2.31.1
+ENV OP_CLI_VERSION=v2.32.0
 RUN wget "https://cache.agilebits.com/dist/1P/op2/pkg/${OP_CLI_VERSION}/op_linux_${TARGETARCH}_${OP_CLI_VERSION}.zip" -O op.zip && \
   unzip -qq op.zip && \
   gpg --keyserver keyserver.ubuntu.com --receive-keys 3FEF9748469ADBE15DA7CA80AC2D62742012EA22 && \

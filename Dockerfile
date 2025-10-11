@@ -71,10 +71,13 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
 
 # renovate: datasource=github-releases depName=tofuutils/tenv
 ARG TENV_VERSION=4.7.21
-RUN curl -sL "https://github.com/tofuutils/tenv/archive/v${TENV_VERSION}.tar.gz" | tar -xz && \
-    ln -s /tmp/tenv-${TENV_VERSION}/bin/* /usr/local/bin/ && \
-    chown -R runner /tmp/tenv-${TENV_VERSION} && \
-    chmod -R +rw /tmp/tenv-${TENV_VERSION}
+# https://github.com/tofuutils/tenv/releases/download/v4.7.21/tenv_v4.7.21_386.apk
+RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "arm64" || echo "x86_64") && \
+  curl -sL "https://github.com/tofuutils/tenv/releases/download/v${TENV_VERSION}/tenv_v${TENV_VERSION}_Linux_${ARCH}.tar.gz" -o /tmp/tenv.tar.gz && \
+  tar -xzf /tmp/tenv.tar.gz -C /tmp && \
+  mv /tmp/tenv /usr/local/bin/tenv && \
+  chmod +x /usr/local/bin/tenv && \
+  rm /tmp/tenv.tar.gz
 
 # Install Node.js
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -92,16 +95,12 @@ RUN curl -sL "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${TARGETARCH}.tar.
   cp "/tmp/helm/linux-${TARGETARCH}/helm" /usr/local/bin/helm && \
   chmod +x /usr/local/bin/helm
 
-ENV OP_CLI_VERSION=v2.32.0
-RUN wget "https://cache.agilebits.com/dist/1P/op2/pkg/${OP_CLI_VERSION}/op_linux_${TARGETARCH}_${OP_CLI_VERSION}.zip" -O op.zip && \
-  unzip -qq op.zip && \
-  gpg --keyserver keyserver.ubuntu.com --receive-keys 3FEF9748469ADBE15DA7CA80AC2D62742012EA22 && \
-  gpg --verify op.sig op && \
-  mv op /usr/local/bin/ && \
-  rm -r op.zip && \
-  groupadd -f onepassword-cli && \
-  chgrp onepassword-cli /usr/local/bin/op && \
-  chmod g+s /usr/local/bin/op
+# renovate: depName=1password
+ENV OP_CLI_VERSION=2.32.0
+RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | tee /etc/apt/sources.list.d/1password.list && \
+    apt-get update && \
+    apt-get install -y 1password-cli=${OP_CLI_VERSION}*
 
 # renovate: datasource=github-releases depName=anchore/syft
 ENV SYFT_VERSION=1.33.0

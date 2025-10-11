@@ -28,7 +28,7 @@ WORKDIR /tmp
 # renovate: datasource=github-tags depName=aws/aws-cli
 ARG AWS_CLI_VERSION=2.31.13
 RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-${ARCH}-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && \
+    curl -Ls "https://awscli.amazonaws.com/awscli-exe-linux-${ARCH}-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && \
     unzip -qq awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
@@ -36,7 +36,7 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
 
 # renovate: datasource=github-tags depName=mikefarah/yq
 ARG YQ_VERSION=4.47.2
-RUN wget https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${TARGETARCH} -O /usr/local/bin/yq &&\
+RUN curl -Ls https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${TARGETARCH} -o /usr/local/bin/yq &&\
     chmod +x /usr/local/bin/yq
 
 # renovate: datasource=github-tags depName=terraform-docs/terraform-docs
@@ -57,7 +57,7 @@ ENV DOCKER_PLUGINS_DIR="/usr/local/lib/docker/cli-plugins"
 # renovate: datasource=github-tags depName=docker/buildx
 ENV DOCKER_BUILDX_VERSION="0.29.1"
 RUN mkdir -p "$DOCKER_PLUGINS_DIR" && \
-  curl -L "https://github.com/docker/buildx/releases/download/v${DOCKER_BUILDX_VERSION}/buildx-v${DOCKER_BUILDX_VERSION}.linux-${TARGETARCH}" -o "$DOCKER_PLUGINS_DIR/docker-buildx" && \
+  curl -sL "https://github.com/docker/buildx/releases/download/v${DOCKER_BUILDX_VERSION}/buildx-v${DOCKER_BUILDX_VERSION}.linux-${TARGETARCH}" -o "$DOCKER_PLUGINS_DIR/docker-buildx" && \
   chmod +x "$DOCKER_PLUGINS_DIR/docker-buildx"
 
 # Install docker compose
@@ -77,14 +77,16 @@ RUN curl -sL "https://github.com/tofuutils/tenv/archive/v${TENV_VERSION}.tar.gz"
     chmod -R +rw /tmp/tenv-${TENV_VERSION}
 
 # Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_lts.x -o /tmp/nodesource_setup.sh && \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    curl -sL https://deb.nodesource.com/setup_lts.x -o /tmp/nodesource_setup.sh && \
     bash /tmp/nodesource_setup.sh && \
     apt-get install -y nodejs && \
     rm /tmp/nodesource_setup.sh
 
 # renovate: datasource=github-releases depName=helm/helm
 ENV HELM_VERSION=3.19.0
-RUN curl -L "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${TARGETARCH}.tar.gz" -o /tmp/helm.tar.gz && \
+RUN curl -sL "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${TARGETARCH}.tar.gz" -o /tmp/helm.tar.gz && \
   mkdir -p /tmp/helm && \
   tar -zxvf /tmp/helm.tar.gz -C /tmp/helm && \
   cp "/tmp/helm/linux-${TARGETARCH}/helm" /usr/local/bin/helm && \
@@ -111,12 +113,12 @@ RUN wget "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syf
 
 # renovate: datasource=github-releases depName=cyb3r-jak3/cloudflare-utils
 ENV CLOUDFLARE_UTILS_VERSION=1.6.1
-RUN curl -L "https://github.com/Cyb3r-Jak3/cloudflare-utils/releases/download/v${CLOUDFLARE_UTILS_VERSION}/cloudflare-utils_linux_${TARGETARCH}" -o /usr/local/bin/cloudflare-utils && \
+RUN curl -sL "https://github.com/Cyb3r-Jak3/cloudflare-utils/releases/download/v${CLOUDFLARE_UTILS_VERSION}/cloudflare-utils_linux_${TARGETARCH}" -o /usr/local/bin/cloudflare-utils && \
   chmod +x /usr/local/bin/cloudflare-utils
 
 # renovate: datasource=github-releases depName=sigstore/cosign
 ENV COSIGN_VERSION=3.0.2
-RUN curl -L "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${TARGETARCH}" -o /usr/local/bin/cosign && \
+RUN curl -sL "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${TARGETARCH}" -o /usr/local/bin/cosign && \
   chmod +x /usr/local/bin/cosign
 
 WORKDIR /

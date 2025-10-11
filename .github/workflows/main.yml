@@ -93,7 +93,7 @@ jobs:
             --entrypoint /bin/bash \
             --env GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
             ${{ steps.build.outputs.imageid }} -c '
-              tfenv version && \
+              tenv version && \
               terraform-docs --version && \
               yq --version && \
               aws --version && \

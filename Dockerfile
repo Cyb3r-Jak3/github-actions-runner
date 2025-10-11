@@ -28,7 +28,7 @@ WORKDIR /tmp
 # renovate: datasource=github-tags depName=aws/aws-cli
 ARG AWS_CLI_VERSION=2.31.13
 RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
-    curl "https://awscli.amazonaws.com/awscli-exe-linux-${ARCH}-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && \
+    curl -Ls "https://awscli.amazonaws.com/awscli-exe-linux-${ARCH}-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && \
     unzip -qq awscliv2.zip && \
     ./aws/install && \
     rm awscliv2.zip && \
@@ -36,7 +36,7 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
 
 # renovate: datasource=github-tags depName=mikefarah/yq
 ARG YQ_VERSION=4.47.2
-RUN wget https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${TARGETARCH} -O /usr/local/bin/yq &&\
+RUN curl -Ls https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${TARGETARCH} -o /usr/local/bin/yq &&\
     chmod +x /usr/local/bin/yq
 
 # renovate: datasource=github-tags depName=terraform-docs/terraform-docs
@@ -57,7 +57,7 @@ ENV DOCKER_PLUGINS_DIR="/usr/local/lib/docker/cli-plugins"
 # renovate: datasource=github-tags depName=docker/buildx
 ENV DOCKER_BUILDX_VERSION="0.29.1"
 RUN mkdir -p "$DOCKER_PLUGINS_DIR" && \
-  curl -L "https://github.com/docker/buildx/releases/download/v${DOCKER_BUILDX_VERSION}/buildx-v${DOCKER_BUILDX_VERSION}.linux-${TARGETARCH}" -o "$DOCKER_PLUGINS_DIR/docker-buildx" && \
+  curl -sL "https://github.com/docker/buildx/releases/download/v${DOCKER_BUILDX_VERSION}/buildx-v${DOCKER_BUILDX_VERSION}.linux-${TARGETARCH}" -o "$DOCKER_PLUGINS_DIR/docker-buildx" && \
   chmod +x "$DOCKER_PLUGINS_DIR/docker-buildx"
 
 # Install docker compose
@@ -69,37 +69,38 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
   chmod +x "$DOCKER_PLUGINS_DIR/docker-compose" && \
   ln -s "$DOCKER_PLUGINS_DIR/docker-compose" "/usr/local/bin/docker-compose"
 
-# renovate: datasource=github-releases depName=tofuutils/tofuenv
-ARG TOFUENV_VERSION=1.0.7
-RUN curl -sL "https://github.com/tofuutils/tofuenv/archive/v${TOFUENV_VERSION}.tar.gz" | tar -xz && \
-    ln -s /tmp/tofuenv-${TOFUENV_VERSION}/bin/* /usr/local/bin/ && \
-    chown -R runner /tmp/tofuenv-${TOFUENV_VERSION} && \
-    chmod -R +rw /tmp/tofuenv-${TOFUENV_VERSION}
+# renovate: datasource=github-releases depName=tofuutils/tenv
+ARG TENV_VERSION=4.7.21
+# https://github.com/tofuutils/tenv/releases/download/v4.7.21/tenv_v4.7.21_386.apk
+RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "arm64" || echo "x86_64") && \
+  curl -sL "https://github.com/tofuutils/tenv/releases/download/v${TENV_VERSION}/tenv_v${TENV_VERSION}_Linux_${ARCH}.tar.gz" -o /tmp/tenv.tar.gz && \
+  tar -xzf /tmp/tenv.tar.gz -C /tmp && \
+  mv /tmp/tenv /usr/local/bin/tenv && \
+  chmod +x /usr/local/bin/tenv && \
+  rm /tmp/tenv.tar.gz
 
 # Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_lts.x -o /tmp/nodesource_setup.sh && \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    curl -sL https://deb.nodesource.com/setup_lts.x -o /tmp/nodesource_setup.sh && \
     bash /tmp/nodesource_setup.sh && \
     apt-get install -y nodejs && \
     rm /tmp/nodesource_setup.sh
 
 # renovate: datasource=github-releases depName=helm/helm
 ENV HELM_VERSION=3.19.0
-RUN curl -L "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${TARGETARCH}.tar.gz" -o /tmp/helm.tar.gz && \
+RUN curl -sL "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${TARGETARCH}.tar.gz" -o /tmp/helm.tar.gz && \
   mkdir -p /tmp/helm && \
   tar -zxvf /tmp/helm.tar.gz -C /tmp/helm && \
   cp "/tmp/helm/linux-${TARGETARCH}/helm" /usr/local/bin/helm && \
   chmod +x /usr/local/bin/helm
 
-ENV OP_CLI_VERSION=v2.31.1
-RUN wget "https://cache.agilebits.com/dist/1P/op2/pkg/${OP_CLI_VERSION}/op_linux_${TARGETARCH}_${OP_CLI_VERSION}.zip" -O op.zip && \
-  unzip -qq op.zip && \
-  gpg --keyserver keyserver.ubuntu.com --receive-keys 3FEF9748469ADBE15DA7CA80AC2D62742012EA22 && \
-  gpg --verify op.sig op && \
-  mv op /usr/local/bin/ && \
-  rm -r op.zip && \
-  groupadd -f onepassword-cli && \
-  chgrp onepassword-cli /usr/local/bin/op && \
-  chmod g+s /usr/local/bin/op
+# renovate: depName=1password
+ENV OP_CLI_VERSION=2.32.0
+RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | tee /etc/apt/sources.list.d/1password.list && \
+    apt-get update && \
+    apt-get install -y 1password-cli=${OP_CLI_VERSION}*
 
 # renovate: datasource=github-releases depName=anchore/syft
 ENV SYFT_VERSION=1.33.0
@@ -111,11 +112,13 @@ RUN wget "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syf
 
 # renovate: datasource=github-releases depName=cyb3r-jak3/cloudflare-utils
 ENV CLOUDFLARE_UTILS_VERSION=1.6.1
-RUN curl -L "https://github.com/Cyb3r-Jak3/cloudflare-utils/releases/download/v${CLOUDFLARE_UTILS_VERSION}/cloudflare-utils_${CLOUDFLARE_UTILS_VERSION}_linux_${TARGETARCH}.tar.xz" -o /tmp/cloudflare-utils.tar.xz && \
-  mkdir -p /tmp/cloudflare-utils && \
-  tar -xvf /tmp/cloudflare-utils.tar.xz -C /tmp/cloudflare-utils && \
-  cp "/tmp/cloudflare-utils/cloudflare-utils" /usr/local/bin/cloudflare-utils && \
+RUN curl -sL "https://github.com/Cyb3r-Jak3/cloudflare-utils/releases/download/v${CLOUDFLARE_UTILS_VERSION}/cloudflare-utils_linux_${TARGETARCH}" -o /usr/local/bin/cloudflare-utils && \
   chmod +x /usr/local/bin/cloudflare-utils
+
+# renovate: datasource=github-releases depName=sigstore/cosign
+ENV COSIGN_VERSION=3.0.2
+RUN curl -sL "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${TARGETARCH}" -o /usr/local/bin/cosign && \
+  chmod +x /usr/local/bin/cosign
 
 WORKDIR /
 

@@ -2,7 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "github>Cyb3r-Jak3/renovate-configs//recommend-extended.json",
-    "customManagers:dockerfileVersions",
     "schedule:automergeDaily",
     "schedule:daily"
   ],
@@ -10,6 +9,17 @@
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
+    }
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/^Dockerfile$/"],
+      "matchStrings": [
+        "#\\s*renovate:\\s*?(suite=(?<suite>.*?))?\\s*depName=(?<depName>.*?)?\\sENV .*?_VERSION=\"(?<currentValue>.*)\""
+      ],
+      "registryUrlTemplate": "https://downloads.1password.com/linux/debian/amd64?suite=stable&components=main&binaryArch=amd64",
+      "datasourceTemplate": "deb"
     }
   ],
   "autoApprove": true,

@@ -69,12 +69,12 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
   chmod +x "$DOCKER_PLUGINS_DIR/docker-compose" && \
   ln -s "$DOCKER_PLUGINS_DIR/docker-compose" "/usr/local/bin/docker-compose"
 
-# renovate: datasource=github-releases depName=tofuutils/tofuenv
-ARG TOFUENV_VERSION=1.0.7
-RUN curl -sL "https://github.com/tofuutils/tofuenv/archive/v${TOFUENV_VERSION}.tar.gz" | tar -xz && \
-    ln -s /tmp/tofuenv-${TOFUENV_VERSION}/bin/* /usr/local/bin/ && \
-    chown -R runner /tmp/tofuenv-${TOFUENV_VERSION} && \
-    chmod -R +rw /tmp/tofuenv-${TOFUENV_VERSION}
+# renovate: datasource=github-releases depName=tofuutils/tenv
+ARG TENV_VERSION=4.7.21
+RUN curl -sL "https://github.com/tofuutils/tenv/archive/v${TENV_VERSION}.tar.gz" | tar -xz && \
+    ln -s /tmp/tenv-${TENV_VERSION}/bin/* /usr/local/bin/ && \
+    chown -R runner /tmp/tenv-${TENV_VERSION} && \
+    chmod -R +rw /tmp/tenv-${TENV_VERSION}
 
 # Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_lts.x -o /tmp/nodesource_setup.sh && \
@@ -111,11 +111,13 @@ RUN wget "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syf
 
 # renovate: datasource=github-releases depName=cyb3r-jak3/cloudflare-utils
 ENV CLOUDFLARE_UTILS_VERSION=1.6.1
-RUN curl -L "https://github.com/Cyb3r-Jak3/cloudflare-utils/releases/download/v${CLOUDFLARE_UTILS_VERSION}/cloudflare-utils_${CLOUDFLARE_UTILS_VERSION}_linux_${TARGETARCH}.tar.xz" -o /tmp/cloudflare-utils.tar.xz && \
-  mkdir -p /tmp/cloudflare-utils && \
-  tar -xvf /tmp/cloudflare-utils.tar.xz -C /tmp/cloudflare-utils && \
-  cp "/tmp/cloudflare-utils/cloudflare-utils" /usr/local/bin/cloudflare-utils && \
+RUN curl -L "https://github.com/Cyb3r-Jak3/cloudflare-utils/releases/download/v${CLOUDFLARE_UTILS_VERSION}/cloudflare-utils_linux_${TARGETARCH}" -o /usr/local/bin/cloudflare-utils && \
   chmod +x /usr/local/bin/cloudflare-utils
+
+# renovate: datasource=github-releases depName=sigstore/cosign
+ENV COSIGN_VERSION=3.0.2
+RUN curl -L "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${TARGETARCH}" -o /usr/local/bin/cosign && \
+  chmod +x /usr/local/bin/cosign
 
 WORKDIR /
 

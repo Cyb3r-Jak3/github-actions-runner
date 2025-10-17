@@ -103,7 +103,7 @@ RUN curl -sS https://downloads.1password.com/linux/keys/1password.asc | gpg --de
     apt-get install -y 1password-cli=${OP_CLI_VERSION}*
 
 # renovate: datasource=github-releases depName=anchore/syft
-ENV SYFT_VERSION=1.34.1
+ENV SYFT_VERSION=1.34.2
 RUN wget "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syft_${SYFT_VERSION}_linux_${TARGETARCH}.tar.gz" -O syft.tar.gz && \
   tar -xzf syft.tar.gz syft && \
   mv syft /usr/local/bin/syft && \

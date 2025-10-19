@@ -62,7 +62,7 @@ RUN mkdir -p "$DOCKER_PLUGINS_DIR" && \
 
 # Install docker compose
 # renovate: datasource=github-tags depName=docker/compose
-ENV DOCKER_COMPOSE_VERSION="2.40.0"
+ENV DOCKER_COMPOSE_VERSION="2.40.1"
 RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \ 
   mkdir -p "$DOCKER_PLUGINS_DIR" && \
   curl -SL "https://github.com/docker/compose/releases/download/v${DOCKER_COMPOSE_VERSION}/docker-compose-linux-${ARCH}" -o "$DOCKER_PLUGINS_DIR/docker-compose" && \

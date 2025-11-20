@@ -70,7 +70,7 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
   ln -s "$DOCKER_PLUGINS_DIR/docker-compose" "/usr/local/bin/docker-compose"
 
 # renovate: datasource=github-releases depName=tofuutils/tenv
-ARG TENV_VERSION=4.7.21
+ARG TENV_VERSION=4.8.3
 # https://github.com/tofuutils/tenv/releases/download/v4.7.21/tenv_v4.7.21_386.apk
 RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "arm64" || echo "x86_64") && \
   curl -sL "https://github.com/tofuutils/tenv/releases/download/v${TENV_VERSION}/tenv_v${TENV_VERSION}_Linux_${ARCH}.tar.gz" -o /tmp/tenv.tar.gz && \

@@ -40,7 +40,7 @@ RUN curl -Ls https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq
     chmod +x /usr/local/bin/yq
 
 # renovate: datasource=github-tags depName=terraform-docs/terraform-docs
-ARG TERRAFORM_DOCS_VERSION=0.20.0
+ARG TERRAFORM_DOCS_VERSION=0.21.0
 RUN curl -sSLo ./terraform-docs.tar.gz https://terraform-docs.io/dl/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-$(uname)-amd64.tar.gz && \
     tar -xzf terraform-docs.tar.gz && \
     chmod +x terraform-docs && \

@@ -35,7 +35,7 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
     rm -rf aws
 
 # renovate: datasource=github-tags depName=mikefarah/yq
-ARG YQ_VERSION=4.49.2
+ARG YQ_VERSION=4.50.1
 RUN curl -Ls https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${TARGETARCH} -o /usr/local/bin/yq &&\
     chmod +x /usr/local/bin/yq
 
@@ -71,13 +71,13 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
 
 # renovate: datasource=github-releases depName=tofuutils/tenv
 ARG TENV_VERSION=4.9.0
-# https://github.com/tofuutils/tenv/releases/download/v4.7.21/tenv_v4.7.21_386.apk
 RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "arm64" || echo "x86_64") && \
   curl -sL "https://github.com/tofuutils/tenv/releases/download/v${TENV_VERSION}/tenv_v${TENV_VERSION}_Linux_${ARCH}.tar.gz" -o /tmp/tenv.tar.gz && \
   tar -xzf /tmp/tenv.tar.gz -C /tmp && \
   mv /tmp/tenv /usr/local/bin/tenv && \
   chmod +x /usr/local/bin/tenv && \
   rm /tmp/tenv.tar.gz
+ENV TENV_AUTO_INSTALL=true
 
 # Install Node.js
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \

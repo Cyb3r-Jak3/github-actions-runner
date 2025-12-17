@@ -76,7 +76,9 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "arm64" || echo "x86_64") && \
   tar -xzf /tmp/tenv.tar.gz -C /tmp && \
   mv /tmp/tenv /usr/local/bin/tenv && \
   chmod +x /usr/local/bin/tenv && \
-  rm /tmp/tenv.tar.gz
+  rm /tmp/tenv.tar.gz && \
+  tenv completion bash > ~/.tenv.completion.bash && \
+  echo "source \$HOME/.tenv.completion.bash" >> ~/.bashrc
 ENV TENV_AUTO_INSTALL=true
 
 # Install Node.js

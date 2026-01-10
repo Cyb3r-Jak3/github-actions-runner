@@ -118,7 +118,7 @@ RUN curl -sL "https://github.com/Cyb3r-Jak3/cloudflare-utils/releases/download/v
   chmod +x /usr/local/bin/cloudflare-utils
 
 # renovate: datasource=github-releases depName=sigstore/cosign
-ENV COSIGN_VERSION=3.0.3
+ENV COSIGN_VERSION=3.0.4
 RUN curl -sL "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${TARGETARCH}" -o /usr/local/bin/cosign && \
   chmod +x /usr/local/bin/cosign
 

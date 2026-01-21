@@ -39,7 +39,7 @@ ARG YQ_VERSION=4.50.1
 RUN curl -sSL https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${TARGETARCH} -o /usr/local/bin/yq &&\
   chmod +x /usr/local/bin/yq
 
-# renovate: datasource=github-tags depName=terraform-docs/terraform-docs
+# renovate: datasource=github-releases depName=terraform-docs/terraform-docs
 ARG TERRAFORM_DOCS_VERSION=0.21.0
 RUN curl -sSL -o ./terraform-docs.tar.gz https://terraform-docs.io/dl/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-$(uname)-amd64.tar.gz && \
   tar -xzf terraform-docs.tar.gz && \
@@ -54,14 +54,14 @@ RUN mkdir -m 777 /root/.ssh; \
 ENV DOCKER_PLUGINS_DIR="/usr/local/lib/docker/cli-plugins"
 
 # Install docker buildx
-# renovate: datasource=github-tags depName=docker/buildx
+# renovate: datasource=github-releases depName=docker/buildx
 ENV DOCKER_BUILDX_VERSION="0.30.1"
 RUN mkdir -p "$DOCKER_PLUGINS_DIR" && \
   curl -sSL "https://github.com/docker/buildx/releases/download/v${DOCKER_BUILDX_VERSION}/buildx-v${DOCKER_BUILDX_VERSION}.linux-${TARGETARCH}" -o "$DOCKER_PLUGINS_DIR/docker-buildx" && \
   chmod +x "$DOCKER_PLUGINS_DIR/docker-buildx"
 
 # Install docker compose
-# renovate: datasource=github-tags depName=docker/compose
+# renovate: datasource=github-releases depName=docker/compose
 ENV DOCKER_COMPOSE_VERSION="5.0.1"
 RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \ 
   mkdir -p "$DOCKER_PLUGINS_DIR" && \

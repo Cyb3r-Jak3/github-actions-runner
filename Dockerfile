@@ -90,7 +90,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   rm /tmp/nodesource_setup.sh
 
 # renovate: datasource=github-releases depName=helm/helm
-ENV HELM_VERSION=4.0.5
+ENV HELM_VERSION=4.1.0
 RUN curl -sSL "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${TARGETARCH}.tar.gz" -o /tmp/helm.tar.gz && \
   mkdir -p /tmp/helm && \
   tar -zxvf /tmp/helm.tar.gz -C /tmp/helm && \

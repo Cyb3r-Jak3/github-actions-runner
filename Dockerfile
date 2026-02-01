@@ -35,7 +35,7 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
   rm -rf aws
 
 # renovate: datasource=github-releases depName=mikefarah/yq
-ARG YQ_VERSION=4.50.1
+ARG YQ_VERSION=4.52.2
 RUN curl -sSL https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/yq_linux_${TARGETARCH} -o /usr/local/bin/yq &&\
   chmod +x /usr/local/bin/yq
 

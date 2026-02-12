@@ -98,7 +98,7 @@ RUN curl -sSL "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${TARGETARCH}.tar
   chmod +x /usr/local/bin/helm
 
 # renovate: depName=1password
-ENV OP_CLI_VERSION=2.32.0
+ENV OP_CLI_VERSION=2.32.1
 RUN curl -sSL https://downloads.1password.com/linux/keys/1password.asc | gpg --dearmor --output /usr/share/keyrings/1password-archive-keyring.gpg && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/1password-archive-keyring.gpg] https://downloads.1password.com/linux/debian/$(dpkg --print-architecture) stable main" | tee /etc/apt/sources.list.d/1password.list && \
     apt-get update && \

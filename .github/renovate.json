@@ -16,7 +16,7 @@
       "customType": "regex",
       "managerFilePatterns": ["/^Dockerfile$/"],
       "matchStrings": [
-        "#\\s*renovate:\\s*?(suite=(?<suite>.*?))?\\s*depName=(?<depName>.*?)?\\sENV .*?_VERSION=\"(?<currentValue>.*)\""
+        "#\\s*renovate:\\s*?(suite=(?<suite>.*?))?\\s*depName=(?<depName>.*?)?\\sENV .*?_VERSION=\\\"?(?<currentValue>[^\\\"\n]+)\\\"?"
       ],
       "registryUrlTemplate": "https://downloads.1password.com/linux/debian/amd64?suite=stable&components=main&binaryArch=amd64",
       "datasourceTemplate": "deb"

@@ -1,0 +1,49 @@
+name: Schedule Release
+
+on:
+  schedule:
+    # Runs every Friday at 10pm EST / 11pm EDT
+    # Cron: minute hour day month day-of-week (UTC)
+    # 0 3 * * 6 = 03:00 UTC Saturday = 22:00 EST Friday / 23:00 EDT Friday
+    - cron: '0 3 * * 6'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Generate tag name
+        id: tag
+        run: |
+          TAG="v-$(date -u +%Y-%m-%d)"
+          echo "name=$TAG" >> $GITHUB_OUTPUT
+          echo "Generated tag: $TAG"
+
+      - name: Check if tag exists
+        id: check
+        run: |
+          TAG="${{ steps.tag.outputs.name }}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Tag $TAG already exists, skipping creation"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Tag $TAG does not exist, will create it"
+          fi
+
+      - name: Create and push tag
+        if: steps.check.outputs.exists == 'false'
+        run: |
+          TAG="${{ steps.tag.outputs.name }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"

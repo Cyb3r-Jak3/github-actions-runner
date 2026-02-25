@@ -6,10 +6,6 @@ on:
       - "main"
     tags:
       - 'v*'
-    paths:
-      - .github/workflows/main.yml
-      - 'Dockerfile'
-      - 'pre-hook.sh'
   pull_request:
     branches:
       - "main"

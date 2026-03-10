@@ -19,11 +19,22 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate tag name
         id: tag
         run: |
-          TAG="v-$(date -u +%Y-%m-%d)"
+          BASE_TAG="v-$(date -u +%Y-%m-%d)"
+          TAG="$BASE_TAG"
+
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            RC=1
+            while git rev-parse "${BASE_TAG}-rc-${RC}" >/dev/null 2>&1; do
+              RC=$((RC + 1))
+            done
+            TAG="${BASE_TAG}-rc-${RC}"
+          fi
+
           echo "name=$TAG" >> $GITHUB_OUTPUT
           echo "Generated tag: $TAG"
 
@@ -41,8 +52,6 @@ jobs:
 
       - name: Create and push tag
         if: steps.check.outputs.exists == 'false'
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
         run: |
           TAG="${{ steps.tag.outputs.name }}"
           git config user.name "github-actions[bot]"

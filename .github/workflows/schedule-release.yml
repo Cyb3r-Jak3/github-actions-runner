@@ -24,7 +24,7 @@ jobs:
       - name: Generate tag name
         id: tag
         run: |
-          BASE_TAG="v-$(date -u +%Y-%m-%d)"
+          BASE_TAG="v$(date -u +%Y-%m-%d)"
           TAG="$BASE_TAG"
 
           if git rev-parse "$TAG" >/dev/null 2>&1; then

@@ -122,6 +122,15 @@ ENV COSIGN_VERSION=3.0.6
 RUN curl -sSL "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${TARGETARCH}" -o /usr/local/bin/cosign && \
   chmod +x /usr/local/bin/cosign
 
+# renovate: datasource=github-releases depName=goreleaser/goreleaser
+ENV GORELEASER_VERSION=2.15.2
+RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "arm64" || echo "x86_64") && \
+  curl -sSL "https://github.com/goreleaser/goreleaser/releases/download/v${GORELEASER_VERSION}/goreleaser_Linux_${ARCH}.tar.gz" -o /tmp/goreleaser.tar.gz && \
+  tar -xzf /tmp/goreleaser.tar.gz -C /tmp && \
+  mv /tmp/goreleaser /usr/local/bin/goreleaser && \
+  chmod +x /usr/local/bin/goreleaser && \
+  rm /tmp/goreleaser.tar.gz
+
 WORKDIR /
 
 COPY ./pre-hook.sh /etc/arc/hooks/pre-hook.sh

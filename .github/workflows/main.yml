@@ -100,7 +100,8 @@ jobs:
               helm version && \
               op --version && \
               cloudflare-utils --version && \
-              cosign version
+              cosign version && \
+              goreleaser --version
             '
 
       - name: GitHub Container Attestation

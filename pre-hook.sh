@@ -7,3 +7,5 @@ fi
 export GITHUB_OUTPUT="true"
 NEW_PATH="$(tenv update-path)"
 export PATH="$NEW_PATH"
+export TF_PLUGIN_CACHE_DIR=$HOME/.terraform.d/plugin-cache
+mkdir -p "$TF_PLUGIN_CACHE_DIR"

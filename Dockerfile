@@ -10,7 +10,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get install -y --no-install-recommends --no-install-suggests \
     git \
     curl \
-    dirmngr\ 
+    dirmngr\
+    dnsutils \
     jq \
     gpg \
     unzip \

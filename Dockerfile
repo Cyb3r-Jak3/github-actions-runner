@@ -28,7 +28,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 WORKDIR /tmp
 # renovate: datasource=github-tags depName=aws/aws-cli
-ARG AWS_CLI_VERSION=2.34.41
+ARG AWS_CLI_VERSION=2.34.49
 RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
   curl -sSL "https://awscli.amazonaws.com/awscli-exe-linux-${ARCH}-${AWS_CLI_VERSION}.zip" -o "awscliv2.zip" && \
   unzip -qq awscliv2.zip && \
@@ -42,7 +42,7 @@ RUN curl -sSL https://github.com/mikefarah/yq/releases/download/v${YQ_VERSION}/y
   chmod +x /usr/local/bin/yq
 
 # renovate: datasource=github-releases depName=terraform-docs/terraform-docs
-ARG TERRAFORM_DOCS_VERSION=0.22.0
+ARG TERRAFORM_DOCS_VERSION=0.24.0
 RUN curl -sSL -o ./terraform-docs.tar.gz https://terraform-docs.io/dl/v${TERRAFORM_DOCS_VERSION}/terraform-docs-v${TERRAFORM_DOCS_VERSION}-$(uname)-amd64.tar.gz && \
   tar -xzf terraform-docs.tar.gz && \
   chmod +x terraform-docs && \
@@ -57,7 +57,7 @@ ENV DOCKER_PLUGINS_DIR="/usr/local/lib/docker/cli-plugins"
 
 # Install docker buildx
 # renovate: datasource=github-releases depName=docker/buildx
-ENV DOCKER_BUILDX_VERSION="0.33.0"
+ENV DOCKER_BUILDX_VERSION="0.34.0"
 RUN mkdir -p "$DOCKER_PLUGINS_DIR" && \
   curl -sSL "https://github.com/docker/buildx/releases/download/v${DOCKER_BUILDX_VERSION}/buildx-v${DOCKER_BUILDX_VERSION}.linux-${TARGETARCH}" -o "$DOCKER_PLUGINS_DIR/docker-buildx" && \
   chmod +x "$DOCKER_PLUGINS_DIR/docker-buildx"
@@ -72,7 +72,7 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "aarch64" || echo "x86_64") && \
   ln -s "$DOCKER_PLUGINS_DIR/docker-compose" "/usr/local/bin/docker-compose"
 
 # renovate: datasource=github-releases depName=tofuutils/tenv
-ARG TENV_VERSION=4.12.0
+ARG TENV_VERSION=4.12.2
 RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "arm64" || echo "x86_64") && \
   curl -sSL "https://github.com/tofuutils/tenv/releases/download/v${TENV_VERSION}/tenv_v${TENV_VERSION}_Linux_${ARCH}.tar.gz" -o /tmp/tenv.tar.gz && \
   tar -xzf /tmp/tenv.tar.gz -C /tmp && \
@@ -92,7 +92,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
   rm /tmp/nodesource_setup.sh
 
 # renovate: datasource=github-releases depName=helm/helm
-ENV HELM_VERSION=4.1.4
+ENV HELM_VERSION=4.2.0
 RUN curl -sSL "https://get.helm.sh/helm-v${HELM_VERSION}-linux-${TARGETARCH}.tar.gz" -o /tmp/helm.tar.gz && \
   mkdir -p /tmp/helm && \
   tar -zxvf /tmp/helm.tar.gz -C /tmp/helm && \

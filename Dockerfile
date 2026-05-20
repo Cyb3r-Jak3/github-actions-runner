@@ -57,7 +57,7 @@ ENV DOCKER_PLUGINS_DIR="/usr/local/lib/docker/cli-plugins"
 
 # Install docker buildx
 # renovate: datasource=github-releases depName=docker/buildx
-ENV DOCKER_BUILDX_VERSION="0.34.0"
+ENV DOCKER_BUILDX_VERSION="0.34.1"
 RUN mkdir -p "$DOCKER_PLUGINS_DIR" && \
   curl -sSL "https://github.com/docker/buildx/releases/download/v${DOCKER_BUILDX_VERSION}/buildx-v${DOCKER_BUILDX_VERSION}.linux-${TARGETARCH}" -o "$DOCKER_PLUGINS_DIR/docker-buildx" && \
   chmod +x "$DOCKER_PLUGINS_DIR/docker-buildx"

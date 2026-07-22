@@ -115,7 +115,7 @@ RUN curl -sSL "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION
   chmod +x /usr/local/bin/syft
 
 # renovate: datasource=github-releases depName=cyb3r-jak3/cloudflare-utils
-ENV CLOUDFLARE_UTILS_VERSION=1.6.1
+ENV CLOUDFLARE_UTILS_VERSION=1.7.0
 RUN curl -sSL "https://github.com/Cyb3r-Jak3/cloudflare-utils/releases/download/v${CLOUDFLARE_UTILS_VERSION}/cloudflare-utils_linux_${TARGETARCH}" -o /usr/local/bin/cloudflare-utils && \
   chmod +x /usr/local/bin/cloudflare-utils
 

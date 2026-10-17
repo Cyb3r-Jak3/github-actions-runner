@@ -25,6 +25,11 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     xz-utils \
     wget
 
+RUN mkdir -m 777 /root/.ssh; \
+  touch -m 777 /root/.ssh/known_hosts; \
+  ssh-keyscan github.com > /root/.ssh/known_hosts
+
+ENV DOCKER_PLUGINS_DIR="/usr/local/lib/docker/cli-plugins"
 
 WORKDIR /tmp
 # renovate: datasource=github-tags depName=aws/aws-cli
@@ -48,12 +53,6 @@ RUN curl -sSL -o ./terraform-docs.tar.gz https://terraform-docs.io/dl/v${TERRAFO
   chmod +x terraform-docs && \
   mv terraform-docs /usr/local/bin/terraform-docs && \
   rm terraform-docs.tar.gz
-
-RUN mkdir -m 777 /root/.ssh; \
-  touch -m 777 /root/.ssh/known_hosts; \
-  ssh-keyscan github.com > /root/.ssh/known_hosts
-
-ENV DOCKER_PLUGINS_DIR="/usr/local/lib/docker/cli-plugins"
 
 # Install docker buildx
 # renovate: datasource=github-releases depName=docker/buildx
@@ -132,6 +131,14 @@ RUN ARCH=$([ "$TARGETARCH" = "arm64" ] && echo "arm64" || echo "x86_64") && \
   mv /tmp/goreleaser /usr/local/bin/goreleaser && \
   chmod +x /usr/local/bin/goreleaser && \
   rm /tmp/goreleaser.tar.gz
+
+# renovate: datasource=github-releases depName=go-task/task
+ENV TASK_VERSION=3.54.0
+RUN curl -sSL "https://github.com/go-task/task/releases/download/v${TASK_VERSION}/task_linux_${TARGETARCH}.tar.gz" -o task.tar.gz && \
+  tar -xzf task.tar.gz task && \
+  mv task /usr/local/bin/task && \
+  rm task.tar.gz && \
+  chmod +x /usr/local/bin/task
 
 WORKDIR /
 
